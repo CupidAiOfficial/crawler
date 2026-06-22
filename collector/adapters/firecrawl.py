@@ -101,6 +101,14 @@ class FirecrawlSearchAdapter(SourceAdapter):
             value = result.get(key)
             if isinstance(value, list):
                 return [item for item in value if isinstance(item, dict)]
+            if isinstance(value, dict):
+                items: list[dict[str, object]] = []
+                for nested_key in ["web", "images", "news"]:
+                    nested = value.get(nested_key)
+                    if isinstance(nested, list):
+                        items.extend(item for item in nested if isinstance(item, dict))
+                if items:
+                    return items
         return []
 
     def _get(self, item: dict[str, object], key: str) -> str | None:

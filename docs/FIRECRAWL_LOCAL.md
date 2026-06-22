@@ -30,6 +30,10 @@ V:\CupidAi\firecrawl
 
 and creates a local `.env`.
 
+The helper uses `POSTGRES_DB=postgres` because the current Firecrawl
+`nuq-postgres` image configures `pg_cron` against the default `postgres`
+database.
+
 To build and start it immediately:
 
 ```powershell
@@ -103,5 +107,14 @@ docker compose ps
 Invoke-RestMethod http://localhost:3002/v2/search -Method Post -ContentType "application/json" -Body '{"query":"Hyderabad cafes","limit":3}'
 ```
 
-If your local Firecrawl build exposes only v1 endpoints, update
-`FIRECRAWL_BASE_URL` normally; the crawler adapter uses v2 endpoints by default.
+The crawler adapter uses v2 endpoints by default and accepts both v2 search
+responses shaped like `data.web` and v1-style responses shaped like `data`.
+
+If the Firecrawl API exits with `relation "nuq.queue_scrape" does not exist`,
+check that Firecrawl's `.env` has `POSTGRES_DB=postgres`. If the database was
+already initialized with another name, apply the schema to `postgres`:
+
+```powershell
+Get-Content apps\nuq-postgres\nuq.sql -Raw | docker compose exec -T nuq-postgres psql -U firecrawl -d postgres -v ON_ERROR_STOP=1
+docker compose up -d --force-recreate api
+```
