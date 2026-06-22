@@ -77,6 +77,7 @@ Enabled by default:
 - Wikidata API
 - Official Google Programmable Search JSON API, when credentials are configured
 - Generic public web pages discovered through search results or manual seeds
+- Local/self-hosted Firecrawl search and page scraping, when configured
 
 Commercial and social platforms such as Google Maps, Instagram, Facebook,
 TripAdvisor, Zomato, Swiggy, BookMyShow, District, Paytm Insider, Meetup,
@@ -134,6 +135,7 @@ python -m collector.cli seed openstreetmap "badminton"
 python -m collector.cli seed wikipedia "Hyderabad startup communities"
 python -m collector.cli seed google_search "Hyderabad pottery workshops"
 python -m collector.cli seed web_page "https://en.wikipedia.org/wiki/Hyderabad"
+python -m collector.cli seed firecrawl_search "places to visit after midnight in hyderabad"
 ```
 
 Inspect coverage:
@@ -190,6 +192,7 @@ mentions.
 - `collector/core/enrichment.py` generates topics, sentiment, audience, hidden-gem, popularity, and intent tags.
 - `collector/adapters/google_search.py` discovers public web pages through the official Google API.
 - `collector/adapters/web_page.py` crawls allowed pages, parses metadata/JSON-LD/text/links/images, and emits more candidates.
+- `collector/adapters/firecrawl.py` uses a local/self-hosted Firecrawl API for search and page extraction.
 - `collector/adapters/source_registry.py` documents enabled and gated sources.
 
 ## Configuration
@@ -209,7 +212,23 @@ GOOGLE_CUSTOM_SEARCH_ENGINE_ID=
 WEB_SEARCH_RESULTS_PER_QUERY=10
 WEB_PAGE_MAX_LINKS=20
 WEB_PAGE_MAX_CHARS=12000
+FIRECRAWL_BASE_URL=http://localhost:3002
+FIRECRAWL_API_KEY=
+FIRECRAWL_SEARCH_LIMIT=10
+FIRECRAWL_SCRAPE_FORMATS=["markdown","html"]
 ```
+
+## Local Firecrawl
+
+To use Firecrawl on your laptop:
+
+```powershell
+.\scripts\setup_firecrawl_local.ps1 -Start
+python -m collector.cli seed firecrawl_search "places to visit after midnight in hyderabad"
+python -m collector.cli run --max-candidates 20
+```
+
+See [docs/FIRECRAWL_LOCAL.md](docs/FIRECRAWL_LOCAL.md) for details.
 
 ## Operating Model
 

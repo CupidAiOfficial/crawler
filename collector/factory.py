@@ -3,6 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 
 from collector.adapters import (
+    FirecrawlPageAdapter,
+    FirecrawlSearchAdapter,
     GoogleSearchAdapter,
     OpenStreetMapAdapter,
     WebPageAdapter,
@@ -24,6 +26,8 @@ def build_orchestrator(data_root: Path | None = None) -> CrawlOrchestrator:
         respect_robots=settings.respect_robots,
     )
     adapters = [
+        FirecrawlSearchAdapter(http=http, store=store),
+        FirecrawlPageAdapter(http=http, store=store),
         GoogleSearchAdapter(http=http, store=store),
         OpenStreetMapAdapter(http=http, store=store),
         WebPageAdapter(http=http, store=store),

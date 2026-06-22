@@ -21,6 +21,10 @@ class CollectorSettings(BaseSettings):
     web_search_results_per_query: int = 10
     web_page_max_links: int = 20
     web_page_max_chars: int = 12000
+    firecrawl_base_url: str = "http://localhost:3002"
+    firecrawl_api_key: str | None = None
+    firecrawl_search_limit: int = 10
+    firecrawl_scrape_formats: list[str] = Field(default_factory=lambda: ["markdown", "html"])
 
 
 settings = CollectorSettings()

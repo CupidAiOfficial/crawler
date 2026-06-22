@@ -26,7 +26,18 @@ def main() -> None:
     run.add_argument("--max-candidates", type=int, default=settings.max_candidates_per_run)
 
     seed = sub.add_parser("seed", help="Add a custom query candidate")
-    seed.add_argument("source", choices=["openstreetmap", "wikipedia", "wikidata", "google_search", "web_page"])
+    seed.add_argument(
+        "source",
+        choices=[
+            "openstreetmap",
+            "wikipedia",
+            "wikidata",
+            "google_search",
+            "web_page",
+            "firecrawl_search",
+            "firecrawl_page",
+        ],
+    )
     seed.add_argument("value")
     seed.add_argument("--priority", type=float, default=1.0)
 

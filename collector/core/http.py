@@ -39,6 +39,13 @@ class PoliteHttpClient:
         response = self._request("GET", url, params=params)
         return response.json()
 
+    def post_json(self, url: str, payload: dict[str, object], headers: dict[str, str] | None = None) -> object:
+        request_headers = {"Content-Type": "application/json"}
+        if headers:
+            request_headers.update(headers)
+        response = self._request("POST", url, json=payload, headers=request_headers)
+        return response.json()
+
     def get_text(self, url: str, params: dict[str, object] | None = None) -> FetchResult:
         response = self._request("GET", url, params=params)
         return FetchResult(
