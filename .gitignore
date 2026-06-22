@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+data/raw/**/*.json
+data/city/entities/*/
+data/city/indexes/*.json
+data/checkpoints/*.json
+*.log
+.env
