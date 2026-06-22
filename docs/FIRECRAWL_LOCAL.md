@@ -81,6 +81,15 @@ python -m collector.cli run --max-candidates 20
 python -m collector.cli coverage
 ```
 
+Or run the full local flow in one command:
+
+```powershell
+.\scripts\run_firecrawl_crawler.ps1 -Query "places to visit after midnight in hyderabad" -MaxCandidates 20
+```
+
+This starts the local Firecrawl API if needed, waits until `/v2/search` works,
+seeds the query, runs the crawler batch, and prints coverage.
+
 Flow:
 
 1. `firecrawl_search` sends the query to local Firecrawl.

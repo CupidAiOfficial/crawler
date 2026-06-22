@@ -228,6 +228,19 @@ python -m collector.cli seed firecrawl_search "places to visit after midnight in
 python -m collector.cli run --max-candidates 20
 ```
 
+Or use the combined runner, which starts Firecrawl, waits for it, seeds the
+query, runs a crawler batch, and prints coverage:
+
+```powershell
+.\scripts\run_firecrawl_crawler.ps1 -Query "places to visit after midnight in hyderabad" -MaxCandidates 20
+```
+
+To stop Firecrawl automatically after the batch:
+
+```powershell
+.\scripts\run_firecrawl_crawler.ps1 -Query "late night food places in hyderabad" -MaxCandidates 30 -StopAfterRun
+```
+
 See [docs/FIRECRAWL_LOCAL.md](docs/FIRECRAWL_LOCAL.md) for details.
 
 ## Operating Model
