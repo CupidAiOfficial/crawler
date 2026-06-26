@@ -30,6 +30,10 @@
     "social_groups"
   ],
   "intent_tags": [
+    "quiet",
+    "walking",
+    "outdoor",
+    "scenic",
     "dating",
     "networking",
     "startup",

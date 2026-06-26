@@ -7,6 +7,10 @@ from collector.core.models import CityEntity, EntityMetadata, TextSignal
 
 
 INTENT_KEYWORDS: dict[str, list[str]] = {
+    "quiet": ["quiet", "calm", "peaceful", "silent", "less crowded", "serene"],
+    "walking": ["walk", "walking", "trail", "path", "promenade", "lake", "park"],
+    "outdoor": ["outdoor", "open air", "park", "lake", "garden", "trail"],
+    "scenic": ["scenic", "view", "beautiful", "lake", "sunset", "greenery"],
     "dating": ["date", "romantic", "couple", "cozy", "quiet", "rooftop"],
     "networking": ["founder", "startup", "meetup", "network", "community"],
     "startup": ["startup", "founder", "pitch", "investor", "cowork"],
@@ -97,7 +101,7 @@ class EnrichmentEngine:
         return crowd
 
     def atmosphere(self, text: str) -> list[str]:
-        labels = ["quiet", "lively", "crowded", "cozy", "outdoor", "premium", "casual", "spiritual"]
+        labels = ["quiet", "peaceful", "lively", "crowded", "cozy", "outdoor", "scenic", "premium", "casual", "spiritual"]
         return [label for label in labels if self._contains_term(text, label)]
 
     def hidden_gem_score(self, entity: CityEntity) -> float:

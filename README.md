@@ -150,6 +150,23 @@ Inspect source policy:
 python -m collector.cli sources
 ```
 
+Export app-ready mobile cards:
+
+```powershell
+python -m collector.cli mobile-index --query "quiet places to walk near Begumpet" --limit 25
+```
+
+This writes:
+
+```text
+data/city/indexes/mobile_cards.json
+```
+
+Each card is shaped for mobile lists: `id`, `name`, `category`, `image_url`,
+`address`, `timings`, `rating`, `review_snippets`, `latitude`, `longitude`,
+`distance_km`, `mood_tags`, `intent_tags`, `suitability_scores`, `website`, and
+`relevance_score`.
+
 ## Typical Operating Loop
 
 ```powershell
@@ -190,6 +207,7 @@ mentions.
 - `collector/core/orchestrator.py` manages frontier checkpoints and recursive crawling.
 - `collector/core/dedupe.py` resolves duplicates using name, geo, address, and website signals.
 - `collector/core/enrichment.py` generates topics, sentiment, audience, hidden-gem, popularity, and intent tags.
+- `collector/core/mobile_export.py` flattens entity folders into mobile app card indexes for query results.
 - `collector/adapters/google_search.py` discovers public web pages through the official Google API.
 - `collector/adapters/web_page.py` crawls allowed pages, parses metadata/JSON-LD/text/links/images, and emits more candidates.
 - `collector/adapters/firecrawl.py` uses a local/self-hosted Firecrawl API for search and page extraction.
@@ -217,6 +235,49 @@ FIRECRAWL_API_KEY=
 FIRECRAWL_SEARCH_LIMIT=10
 FIRECRAWL_SCRAPE_FORMATS=["markdown","html"]
 ```
+
+## Mobile App Search Output
+
+For a mobile query like:
+
+```text
+quiet places to walk near Begumpet
+```
+
+generate ranked cards with:
+
+```powershell
+python -m collector.cli mobile-index --query "quiet places to walk near Begumpet" --limit 25
+```
+
+The exporter normalizes common typos such as `quite` to `quiet`, maps walking
+phrases to `good_for_walking`, detects locality hints such as `near Begumpet`,
+and ranks cards using text matches, mood tags, intent suitability, distance,
+coordinates, image availability, and source coverage.
+
+Example card shape:
+
+```json
+{
+  "id": "alam-thota-park-7ebcda978178",
+  "name": "Alam Thota Park",
+  "category": "park",
+  "image_url": null,
+  "address": null,
+  "timings": {},
+  "latitude": 17.4421937,
+  "longitude": 78.4634506,
+  "distance_km": 0.43,
+  "mood_tags": ["family", "family_friendly", "good_for_walking", "outdoor"],
+  "review_snippets": [],
+  "relevance_score": 5.803
+}
+```
+
+Fields such as images, timings, ratings, and reviews appear when the underlying
+source has collected them. OSM-heavy records often have coordinates first;
+Firecrawl/web/API adapters enrich cards with images, descriptions, and review
+signals when publicly available.
 
 ## Local Firecrawl
 
