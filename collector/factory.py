@@ -34,4 +34,4 @@ def build_orchestrator(data_root: Path | None = None) -> CrawlOrchestrator:
         WikipediaAdapter(http=http, store=store),
         WikidataAdapter(http=http, store=store),
     ]
-    return CrawlOrchestrator(data_root=root, adapters=adapters, max_depth=settings.max_depth)
+    return CrawlOrchestrator(data_root=root, adapters=adapters, max_depth=settings.max_depth, store=store)

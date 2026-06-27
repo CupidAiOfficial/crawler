@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import re
 from urllib.parse import urljoin, urlparse
 
@@ -12,6 +13,10 @@ from collector.core.ids import entity_id
 from collector.core.models import CandidateKind, CityEntity, CrawlCandidate, SourceRecord
 from collector.core.orchestrator import SourceAdapter
 from collector.core.storage import JsonStore
+from collector.core.structured_extraction import StructuredExtractor
+
+
+logger = logging.getLogger(__name__)
 
 
 HYDERABAD_TERMS = {
@@ -45,11 +50,13 @@ class WebPageAdapter(SourceAdapter):
     def __init__(self, http: PoliteHttpClient, store: JsonStore) -> None:
         self.http = http
         self.store = store
+        self.extractor = StructuredExtractor()
 
     def can_handle(self, candidate: CrawlCandidate) -> bool:
         return candidate.source == self.name and candidate.kind == CandidateKind.SOURCE_URL
 
     def crawl(self, candidate: CrawlCandidate) -> tuple[list[CityEntity], list[CrawlCandidate]]:
+        logger.info("extracting web page url=%s depth=%s", candidate.value, candidate.depth)
         result = self.http.get_text(candidate.value)
         content_type = result.content_type or ""
         if "html" not in content_type and "<html" not in result.text[:500].lower():
@@ -58,7 +65,29 @@ class WebPageAdapter(SourceAdapter):
         for tag in soup(["script", "style", "noscript", "svg"]):
             tag.decompose()
         text = self._clean_text(soup.get_text(" "))
+        if len(text) < settings.web_page_min_text_chars:
+            logger.info(
+                "web page text too short; enqueueing public render fallback url=%s chars=%s",
+                result.url,
+                len(text),
+            )
+            return [], [
+                CrawlCandidate(
+                    kind=CandidateKind.SOURCE_URL,
+                    source="firecrawl_page",
+                    value=result.url,
+                    priority=max(0.1, candidate.priority - 0.05),
+                    depth=candidate.depth,
+                    metadata={
+                        "parent_url": candidate.metadata.get("parent_url"),
+                        "source": "web_page_public_render_fallback",
+                        "reason": "short_or_js_rendered_page",
+                        "text_chars": len(text),
+                    },
+                )
+            ]
         if not self._is_hyderabad_relevant(text, candidate.value):
+            logger.info("skipping non-hyderabad page url=%s", candidate.value)
             return [], []
         raw_path = self.store.save_raw(
             self.name,
@@ -72,20 +101,97 @@ class WebPageAdapter(SourceAdapter):
                 "metadata": candidate.metadata,
             },
         )
-        entities = self._entities_from_page(soup, text, result.url, raw_path)
+        title = self._title(soup)
+        description = self._meta(soup, "description") or text[:500]
+        is_source_page = self.extractor.is_source_page(title=title, text=text, url=result.url)
+        source_page_path = self.store.save_source_page(
+            self.name,
+            self._raw_key(result.url),
+            {
+                "url": result.url,
+                "title": title,
+                "description": description,
+                "source": self.name,
+                "source_type": "source_page" if is_source_page else "entity_page",
+                "raw_path": raw_path,
+                "is_source_page": is_source_page,
+                "metadata": candidate.metadata,
+            },
+        )
+        entities = self._entities_from_page(soup, text, result.url, raw_path, is_source_page, source_page_path)
+        enriched: list[CityEntity] = []
+        for entity in entities:
+            if entity.raw_json.get("extraction_mode") == "mentioned_entity":
+                enriched.append(entity)
+                continue
+            entity, reviews, relationships = self.extractor.enrich_from_document(
+                entity,
+                text=text,
+                url=result.url,
+                soup=soup,
+            )
+            if reviews:
+                self.store.append_reviews(entity.id, reviews)
+            if relationships:
+                self.store.append_relationships(entity.id, relationships)
+            enriched.append(entity)
         new_candidates = self._link_candidates(soup, result.url, candidate, text)
-        return entities, new_candidates
+        new_candidates.extend(self._entity_lookup_candidates(enriched, candidate, result.url))
+        logger.info(
+            "extracted web page url=%s entities=%s new_candidates=%s",
+            result.url,
+            len(enriched),
+            len(new_candidates),
+        )
+        return enriched, new_candidates
+
+    def _entity_lookup_candidates(
+        self,
+        entities: list[CityEntity],
+        candidate: CrawlCandidate,
+        page_url: str,
+    ) -> list[CrawlCandidate]:
+        candidates: list[CrawlCandidate] = []
+        for entity in entities[:20]:
+            if entity.latitude is not None and entity.longitude is not None:
+                continue
+            candidates.append(
+                CrawlCandidate(
+                    kind=CandidateKind.QUERY,
+                    source="openstreetmap",
+                    value=f"{entity.name} Hyderabad",
+                    priority=max(0.2, candidate.priority - 0.05),
+                    depth=candidate.depth + 1,
+                    metadata={
+                        "parent_url": page_url,
+                        "source_entity_id": entity.id,
+                        "source_entity_name": entity.name,
+                        "reason": "geocode_extracted_mention",
+                    },
+                )
+            )
+        return candidates
 
     def _entities_from_page(
-        self, soup: BeautifulSoup, text: str, url: str, raw_path: str
+        self, soup: BeautifulSoup, text: str, url: str, raw_path: str, is_source_page: bool, source_page_path: str
     ) -> list[CityEntity]:
         structured = self._json_ld_entities(soup, url, raw_path)
-        if structured:
+        if structured and not is_source_page:
             return structured
         title = self._title(soup)
         if not title:
             return []
         description = self._meta(soup, "description") or text[:500]
+        if is_source_page or not self.extractor._valid_entity_name(title):  # noqa: SLF001
+            return self.extractor.extract_mentioned_entities(
+                text=text,
+                source_url=url,
+                source_title=title,
+                raw_path=raw_path,
+                source_name=self.name,
+                source_metadata={"source_page_path": source_page_path},
+                soup=soup,
+            )
         category = self._category(title, description, text)
         locality = self._locality(text)
         return [
@@ -98,11 +204,15 @@ class WebPageAdapter(SourceAdapter):
                 website=url,
                 social_links=self._social_links(soup, url),
                 sources=[
-                    SourceRecord(
-                        source=self.name,
-                        url=url,
-                        raw_path=raw_path,
-                        metadata={
+            SourceRecord(
+                source=self.name,
+                url=url,
+                raw_path=raw_path,
+                source_type="webpage",
+                source_name=urlparse(url).netloc,
+                canonical_url=url,
+                crawl_status="success",
+                metadata={
                             "title": title,
                             "description": description,
                             "image_urls": self._image_urls(soup, url),
@@ -170,11 +280,15 @@ class WebPageAdapter(SourceAdapter):
             website=str(item.get("url") or url),
             social_links=social_links,
             sources=[
-                SourceRecord(
-                    source=self.name,
-                    url=url,
-                    raw_path=raw_path,
-                    metadata={"json_ld_type": item_type, "json_ld": item},
+                    SourceRecord(
+                        source=self.name,
+                        url=url,
+                        raw_path=raw_path,
+                        source_type="webpage",
+                        source_name=urlparse(url).netloc,
+                        canonical_url=url,
+                        crawl_status="success",
+                        metadata={"json_ld_type": item_type, "json_ld": item},
                 )
             ],
         )
@@ -212,7 +326,7 @@ class WebPageAdapter(SourceAdapter):
             candidates.append(
                 CrawlCandidate(
                     kind=CandidateKind.QUERY,
-                    source="google_search",
+                    source=self._search_source(),
                     value=query,
                     priority=0.25,
                     depth=candidate.depth + 1,
@@ -220,6 +334,11 @@ class WebPageAdapter(SourceAdapter):
                 )
             )
         return candidates
+
+    def _search_source(self) -> str:
+        if settings.google_custom_search_api_key and settings.google_custom_search_engine_id:
+            return "google_search"
+        return "firecrawl_search"
 
     def _mentioned_queries(self, text: str) -> list[str]:
         matches = re.findall(

@@ -1,0 +1,44 @@
+{
+  "description": "AI Tinkerers Hyderabad hosts meetups, talks, and builder demos for the local AI community.",
+  "is_source_page": false,
+  "metadata": {
+    "firecrawl_metadata": {
+      "concurrencyLimited": false,
+      "contentType": "text/html; charset=utf-8",
+      "creditsUsed": 1,
+      "csrf-param": "authenticity_token",
+      "csrf-token": "0DmF313AD4-IUi8_XW_gydNO4gpzLMuOoJoc61YLpc75VsSoqW6U-k7lPS5BT8LHF5czojg3pHLlAN7qDADGhQ",
+      "description": "AI Tinkerers Hyderabad hosts meetups, talks, and builder demos for the local AI community.",
+      "language": "en",
+      "layout": "blog_tw",
+      "og:description": "AI Tinkerers Hyderabad hosts meetups, talks, and builder demos for the local AI community.",
+      "og:image": "https://images.aitinkerers.org/blog_images/kmfygdp74u8-dNTC.png",
+      "og:title": "AI Events in Hyderabad | AI Tinkerers Meetups 2026",
+      "og:type": "website",
+      "og:url": "https://hyderabad.aitinkerers.org/",
+      "proxyUsed": "basic",
+      "scrapeId": "019f060e-8bd0-71cf-97d4-0aad41a7da57",
+      "sourceURL": "https://hyderabad.aitinkerers.org/",
+      "statusCode": 200,
+      "title": "AI Events in Hyderabad | AI Tinkerers Meetups 2026",
+      "twitter:card": "summary",
+      "twitter:description": "AI Tinkerers Hyderabad hosts meetups, talks, and builder demos for the local AI community.",
+      "twitter:image": "https://images.aitinkerers.org/blog_images/kmfygdp74u8-dNTC.png",
+      "twitter:title": "AI Events in Hyderabad | AI Tinkerers Meetups 2026",
+      "twitter:url": "https://hyderabad.aitinkerers.org/",
+      "url": "https://hyderabad.aitinkerers.org/",
+      "viewport": "width=device-width, initial-scale=1.0"
+    },
+    "parent": {
+      "search_query": "Hyderabad AI developer meetups",
+      "snippet": "Members include AI engineers, ML researchers, developers, founders, and builders from the local Hyderabad chapter. A typical AI Tinkerers Hyderabad meetup runs about three hours with live demos from local builders, technical Q&A, and networking. Demos are expected to show real systems or code, not sales decks.",
+      "source_search": "firecrawl_search",
+      "title": "AI Events in Hyderabad | AI Tinkerers Meetups 2026"
+    }
+  },
+  "raw_path": "raw\\firecrawl_page\\hyderabad_aitinkerers_org-0510622522e0.json",
+  "source": "firecrawl_page",
+  "source_type": "entity_page",
+  "title": "AI Events in Hyderabad | AI Tinkerers Meetups 2026",
+  "url": "https://hyderabad.aitinkerers.org/"
+}

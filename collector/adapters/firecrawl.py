@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import logging
 from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
@@ -12,6 +13,10 @@ from collector.core.ids import entity_id
 from collector.core.models import CandidateKind, CityEntity, CrawlCandidate, SourceRecord
 from collector.core.orchestrator import SourceAdapter
 from collector.core.storage import JsonStore
+from collector.core.structured_extraction import StructuredExtractor
+
+
+logger = logging.getLogger(__name__)
 
 
 class FirecrawlSearchAdapter(SourceAdapter):
@@ -20,12 +25,14 @@ class FirecrawlSearchAdapter(SourceAdapter):
     def __init__(self, http: PoliteHttpClient, store: JsonStore) -> None:
         self.http = http
         self.store = store
+        self.extractor = StructuredExtractor()
 
     def can_handle(self, candidate: CrawlCandidate) -> bool:
         return candidate.source == self.name and candidate.kind == CandidateKind.QUERY
 
     def crawl(self, candidate: CrawlCandidate) -> tuple[list[CityEntity], list[CrawlCandidate]]:
         query = self._query(candidate.value)
+        logger.info("searching firecrawl query=%s depth=%s", query, candidate.depth)
         payload = {
             "query": query,
             "limit": min(max(settings.firecrawl_search_limit, 1), 20),
@@ -33,7 +40,7 @@ class FirecrawlSearchAdapter(SourceAdapter):
         result = self._post("/v2/search", payload)
         raw_path = self.store.save_raw(self.name, f"{candidate.value}-{candidate.depth}", result)
         items = self._items(result)
-        entities: list[CityEntity] = []
+        logger.info("firecrawl search results query=%s count=%s", query, len(items))
         new_candidates: list[CrawlCandidate] = []
         for rank, item in enumerate(items):
             url = self._get(item, "url") or self._get(item, "link")
@@ -55,26 +62,22 @@ class FirecrawlSearchAdapter(SourceAdapter):
                         },
                     )
                 )
-            if title and markdown and self._is_hyderabad_relevant(f"{title} {markdown}", url or ""):
-                entities.append(
-                    CityEntity(
-                        id=entity_id(title, self._locality(markdown)),
-                        name=title,
-                        category=self._category(title, markdown),
-                        description=self._summary(markdown),
-                        locality=self._locality(markdown),
-                        website=url,
-                        sources=[
-                            SourceRecord(
-                                source=self.name,
-                                url=url,
-                                raw_path=raw_path,
-                                metadata={"search_query": query, "rank": rank, "result": item},
-                            )
-                        ],
-                    )
+            if url and title and markdown:
+                self.store.save_source_page(
+                    self.name,
+                    f"search-{query}-{rank}",
+                    {
+                        "url": url,
+                        "title": title,
+                        "description": markdown,
+                        "source": self.name,
+                        "source_type": "search_result",
+                        "raw_path": raw_path,
+                        "search_query": query,
+                        "search_rank": rank,
+                    },
                 )
-        return entities, new_candidates
+        return [], new_candidates
 
     def _post(self, path: str, payload: dict[str, object]) -> object:
         return self.http.post_json(self._url(path), payload, headers=self._headers())
@@ -144,6 +147,7 @@ class FirecrawlPageAdapter(FirecrawlSearchAdapter):
         return candidate.source == self.name and candidate.kind == CandidateKind.SOURCE_URL
 
     def crawl(self, candidate: CrawlCandidate) -> tuple[list[CityEntity], list[CrawlCandidate]]:
+        logger.info("scraping firecrawl page url=%s depth=%s", candidate.value, candidate.depth)
         payload = {
             "url": candidate.value,
             "formats": settings.firecrawl_scrape_formats,
@@ -164,6 +168,45 @@ class FirecrawlPageAdapter(FirecrawlSearchAdapter):
         text = f"{title or ''} {description or ''} {markdown or self._text_from_html(html)}"
         if not title or not self._is_hyderabad_relevant(text, candidate.value):
             return [], []
+        soup = BeautifulSoup(html, "html.parser") if html else None
+        is_source_page = self.extractor.is_source_page(title=str(title), text=text, url=candidate.value)
+        source_page_path = self.store.save_source_page(
+            self.name,
+            self._raw_key(candidate.value),
+            {
+                "url": candidate.value,
+                "title": str(title),
+                "description": str(description) if description else None,
+                "source": self.name,
+                "source_type": "source_page" if is_source_page else "entity_page",
+                "raw_path": raw_path,
+                "is_source_page": is_source_page,
+                "metadata": {
+                    "firecrawl_metadata": metadata,
+                    "parent": candidate.metadata,
+                },
+            },
+        )
+        if is_source_page:
+            entities = self.extractor.extract_mentioned_entities(
+                text=text,
+                source_url=candidate.value,
+                source_title=str(title),
+                raw_path=raw_path,
+                source_name=self.name,
+                source_metadata={"source_page_path": source_page_path, "parent": candidate.metadata},
+                soup=soup,
+            )
+            new_candidates = self._link_candidates(data, candidate)
+            new_candidates.extend(self._entity_lookup_candidates(entities, candidate))
+            logger.info(
+                "scraped source page url=%s title=%s mentioned_entities=%s new_candidates=%s",
+                candidate.value,
+                title,
+                len(entities),
+                len(new_candidates),
+            )
+            return entities, new_candidates
         entity = CityEntity(
             id=entity_id(str(title), self._locality(text)),
             name=str(title),
@@ -176,6 +219,11 @@ class FirecrawlPageAdapter(FirecrawlSearchAdapter):
                     source=self.name,
                     url=candidate.value,
                     raw_path=raw_path,
+                    source_type="firecrawl_page",
+                    source_name=urlparse(candidate.value).netloc,
+                    canonical_url=candidate.value,
+                    crawl_status="success",
+                    extraction_confidence=0.65,
                     metadata={
                         "firecrawl_metadata": metadata,
                         "parent": candidate.metadata,
@@ -184,8 +232,45 @@ class FirecrawlPageAdapter(FirecrawlSearchAdapter):
                 )
             ],
         )
+        entity, reviews, relationships = self.extractor.enrich_from_document(
+            entity,
+            text=text,
+            url=candidate.value,
+            soup=soup,
+            markdown=markdown,
+        )
+        if reviews:
+            self.store.append_reviews(entity.id, reviews)
+        if relationships:
+            self.store.append_relationships(entity.id, relationships)
         new_candidates = self._link_candidates(data, candidate)
+        logger.info(
+            "scraped firecrawl page url=%s entity=%s new_candidates=%s",
+            candidate.value,
+            entity.name,
+            len(new_candidates),
+        )
         return [entity], new_candidates
+
+    def _entity_lookup_candidates(self, entities: list[CityEntity], candidate: CrawlCandidate) -> list[CrawlCandidate]:
+        candidates: list[CrawlCandidate] = []
+        for entity in entities[:20]:
+            candidates.append(
+                CrawlCandidate(
+                    kind=CandidateKind.QUERY,
+                    source="openstreetmap",
+                    value=f"{entity.name} Hyderabad",
+                    priority=max(0.2, candidate.priority - 0.05),
+                    depth=candidate.depth + 1,
+                    metadata={
+                        "parent_url": candidate.value,
+                        "source_entity_id": entity.id,
+                        "source_entity_name": entity.name,
+                        "reason": "geocode_extracted_mention",
+                    },
+                )
+            )
+        return candidates
 
     def _data(self, result: object) -> dict[str, object]:
         if isinstance(result, dict):

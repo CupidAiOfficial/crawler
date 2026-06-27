@@ -1,10 +1,16 @@
 from __future__ import annotations
 
+import logging
+
 from collector.core.http import PoliteHttpClient
 from collector.core.ids import entity_id
 from collector.core.models import CandidateKind, CityEntity, CrawlCandidate, SourceRecord
 from collector.core.orchestrator import SourceAdapter
 from collector.core.storage import JsonStore
+from collector.core.structured_extraction import StructuredExtractor
+
+
+logger = logging.getLogger(__name__)
 
 
 class WikidataAdapter(SourceAdapter):
@@ -14,11 +20,13 @@ class WikidataAdapter(SourceAdapter):
         self.http = http
         self.store = store
         self.limit = limit
+        self.extractor = StructuredExtractor()
 
     def can_handle(self, candidate: CrawlCandidate) -> bool:
         return candidate.source == self.name and candidate.kind == CandidateKind.QUERY
 
     def crawl(self, candidate: CrawlCandidate) -> tuple[list[CityEntity], list[CrawlCandidate]]:
+        logger.info("searching wikidata query=%s depth=%s", candidate.value, candidate.depth)
         payload = self.http.get_json(
             "https://www.wikidata.org/w/api.php",
             params={
@@ -54,9 +62,28 @@ class WikidataAdapter(SourceAdapter):
                             source_id=qid,
                             license="CC0",
                             raw_path=raw_path,
+                            source_type="open_data",
+                            source_name="Wikidata",
+                            canonical_url=row.get("concepturi"),
+                            search_query=candidate.value,
+                            crawl_status="success",
+                            extraction_confidence=0.5,
                             metadata=row,
                         )
                     ],
                 )
             )
-        return entities, []
+        enriched = []
+        for entity in entities:
+            entity, reviews, relationships = self.extractor.enrich_from_document(
+                entity,
+                text=" ".join([entity.name, entity.description or "", entity.locality or ""]),
+                url=str(entity.website or ""),
+            )
+            if reviews:
+                self.store.append_reviews(entity.id, reviews)
+            if relationships:
+                self.store.append_relationships(entity.id, relationships)
+            enriched.append(entity)
+        logger.info("wikidata extracted query=%s entities=%s", candidate.value, len(enriched))
+        return enriched, []

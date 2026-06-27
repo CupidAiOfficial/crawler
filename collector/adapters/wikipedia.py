@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+
 from bs4 import BeautifulSoup
 
 from collector.core.http import PoliteHttpClient
@@ -7,6 +9,10 @@ from collector.core.ids import entity_id
 from collector.core.models import CandidateKind, CityEntity, CrawlCandidate, SourceRecord
 from collector.core.orchestrator import SourceAdapter
 from collector.core.storage import JsonStore
+from collector.core.structured_extraction import StructuredExtractor
+
+
+logger = logging.getLogger(__name__)
 
 
 class WikipediaAdapter(SourceAdapter):
@@ -16,11 +22,13 @@ class WikipediaAdapter(SourceAdapter):
         self.http = http
         self.store = store
         self.limit = limit
+        self.extractor = StructuredExtractor()
 
     def can_handle(self, candidate: CrawlCandidate) -> bool:
         return candidate.source == self.name and candidate.kind == CandidateKind.QUERY
 
     def crawl(self, candidate: CrawlCandidate) -> tuple[list[CityEntity], list[CrawlCandidate]]:
+        logger.info("searching wikipedia query=%s depth=%s", candidate.value, candidate.depth)
         search = self.http.get_json(
             "https://en.wikipedia.org/w/api.php",
             params={
@@ -57,6 +65,12 @@ class WikipediaAdapter(SourceAdapter):
                             source_id=page_id,
                             license="CC BY-SA",
                             raw_path=raw_path,
+                            source_type="public_api",
+                            source_name="Wikipedia",
+                            canonical_url=page_url,
+                            search_query=candidate.value,
+                            crawl_status="success",
+                            extraction_confidence=0.55,
                         )
                     ],
                 )
@@ -70,4 +84,17 @@ class WikipediaAdapter(SourceAdapter):
                     depth=candidate.depth + 1,
                 )
             )
-        return entities, new_candidates
+        enriched = []
+        for entity in entities:
+            entity, reviews, relationships = self.extractor.enrich_from_document(
+                entity,
+                text=" ".join([entity.name, entity.description or "", entity.locality or ""]),
+                url=str(entity.website or ""),
+            )
+            if reviews:
+                self.store.append_reviews(entity.id, reviews)
+            if relationships:
+                self.store.append_relationships(entity.id, relationships)
+            enriched.append(entity)
+        logger.info("wikipedia extracted query=%s entities=%s new_candidates=%s", candidate.value, len(enriched), len(new_candidates))
+        return enriched, new_candidates

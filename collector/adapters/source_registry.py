@@ -27,7 +27,7 @@ SOURCE_REGISTRY: dict[str, dict[str, object]] = {
     "web_page": {
         "policy": SourcePolicy.HTML_ALLOWED,
         "enabled": True,
-        "notes": "Crawls result pages and seed URLs that allow crawling; respects robots.txt and stores extracted page metadata/provenance.",
+        "notes": "Crawls result pages and seed URLs that allow crawling; respects robots.txt and stores extracted page metadata/provenance. JS-heavy public pages can fall back to Firecrawl rendering, but access controls are not bypassed.",
     },
     "firecrawl_search": {
         "policy": SourcePolicy.HTML_ALLOWED,
@@ -37,7 +37,7 @@ SOURCE_REGISTRY: dict[str, dict[str, object]] = {
     "firecrawl_page": {
         "policy": SourcePolicy.HTML_ALLOWED,
         "enabled": True,
-        "notes": "Uses a configured local/self-hosted Firecrawl API to scrape pages into markdown/html before entity extraction.",
+        "notes": "Uses a configured local/self-hosted Firecrawl API to render public pages into markdown/html before entity extraction. Do not use it to bypass paywalls, login walls, robots exclusions, or anti-bot restrictions.",
     },
     "reddit": {
         "policy": SourcePolicy.OFFICIAL_API_REQUIRED,

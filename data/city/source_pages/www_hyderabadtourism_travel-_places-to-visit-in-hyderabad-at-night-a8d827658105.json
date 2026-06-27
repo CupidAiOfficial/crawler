@@ -1,0 +1,33 @@
+{
+  "description": "Another place to include in your itinerary list of places to visit in Hyderabad at night is the attention-grabbing Gachibowli area. Its upbeat live music clubs, the groovy atmosphere of bars, and the vivacious environment create a peppy and friendly vibe for all.",
+  "is_source_page": true,
+  "metadata": {
+    "firecrawl_metadata": {
+      "concurrencyLimited": false,
+      "contentType": "text/html; charset=utf-8",
+      "creditsUsed": 1,
+      "favicon": "https://www.hyderabadtourism.travel/images/favicon-2025.png",
+      "generator": "Joomla! - Open Source Content Management",
+      "inLanguage": "en-GB",
+      "language": "en-GB",
+      "proxyUsed": "basic",
+      "scrapeId": "019f05b3-f172-736f-9b28-246a37eff19e",
+      "sourceURL": "https://www.hyderabadtourism.travel/places-to-visit-in-hyderabad-at-night",
+      "statusCode": 200,
+      "title": "Places to Visit in Hyderabad at Night",
+      "url": "https://www.hyderabadtourism.travel/places-to-visit-in-hyderabad-at-night",
+      "viewport": "width=device-width, initial-scale=1.0"
+    },
+    "parent": {
+      "search_query": "best places to visit after midnight in Hyderabad",
+      "snippet": "Another place to include in your itinerary list of places to visit in Hyderabad at night is the attention-grabbing Gachibowli area. Its upbeat live music clubs, the groovy atmosphere of bars, and the vivacious environment create a peppy and friendly vibe for all.",
+      "source_search": "firecrawl_search",
+      "title": "Places to Visit in Hyderabad at Night"
+    }
+  },
+  "raw_path": "raw\\firecrawl_page\\www_hyderabadtourism_travel-_places-to-visit-in-hyderabad-at-night-a8d827658105.json",
+  "source": "firecrawl_page",
+  "source_type": "source_page",
+  "title": "Places to Visit in Hyderabad at Night",
+  "url": "https://www.hyderabadtourism.travel/places-to-visit-in-hyderabad-at-night"
+}

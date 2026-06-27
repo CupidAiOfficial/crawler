@@ -59,7 +59,14 @@ class EntityResolver:
         merged.audience = sorted(set(merged.audience + incoming.audience))
         merged.popularity.update(incoming.popularity)
         merged.related_entities = sorted(set(merged.related_entities + incoming.related_entities))
+        merged.media = self._unique_by_id_or_url(merged.media + incoming.media)
+        merged.relationships = self._unique_relationships(merged.relationships + incoming.relationships)
         merged.sources = merged.sources + incoming.sources
+        merged.primary_category = merged.primary_category or incoming.primary_category
+        merged.entity_type = merged.entity_type or incoming.entity_type
+        merged.confidence_score = max(
+            score for score in [merged.confidence_score, incoming.confidence_score] if score is not None
+        ) if any(score is not None for score in [merged.confidence_score, incoming.confidence_score]) else None
         merged.last_seen_at = incoming.last_seen_at
         return merged
 
@@ -81,3 +88,23 @@ class EntityResolver:
         if distance <= 1000:
             return max(0.0, 1.0 - distance / 1000)
         return 0.0
+
+    def _unique_by_id_or_url(self, items):
+        seen = set()
+        out = []
+        for item in items:
+            key = getattr(item, "id", None) or getattr(item, "url", None)
+            if key and key not in seen:
+                out.append(item)
+                seen.add(key)
+        return out
+
+    def _unique_relationships(self, relationships):
+        seen = set()
+        out = []
+        for rel in relationships:
+            key = (rel.subject_id, rel.predicate, rel.object_id)
+            if key not in seen:
+                out.append(rel)
+                seen.add(key)
+        return out

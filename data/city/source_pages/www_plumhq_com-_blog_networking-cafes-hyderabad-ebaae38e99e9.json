@@ -1,0 +1,50 @@
+{
+  "description": "Discover top cafes in Hyderabad that offer the perfect ambiance for professional networking, informal meetings, and collaborations with like-minded individuals.",
+  "is_source_page": true,
+  "metadata": {
+    "firecrawl_metadata": {
+      "concurrencyLimited": false,
+      "contentType": "text/html; charset=utf-8",
+      "creditsUsed": 1,
+      "description": "Discover top cafes in Hyderabad that offer the perfect ambiance for professional networking, informal meetings, and collaborations with like-minded individuals.",
+      "facebook-domain-verification": "ru8wx4tsmodbnj179idtoc0n7rsbhg",
+      "favicon": "https://cdn.prod.website-files.com/63413ad4dec8a91fe53f4fb0/6350395d8e60f11fea41fabc_FVICO.png",
+      "generator": "Webflow",
+      "language": "en",
+      "og:description": "Discover top cafes in Hyderabad that offer the perfect ambiance for professional networking, informal meetings, and collaborations with like-minded individuals.",
+      "og:image": [
+        "https://cdn.prod.website-files.com/63413ad4dec8a93f7e3f4fc7/670cf80998935c86e973bfdb_networking-cafes-hyderabad.png",
+        "https://cdn.prod.website-files.com/63413ad4dec8a93f7e3f4fc7/67595c22d1f23dc4c689b8de_670cf80998935c86e973bfdb_networking-cafes-hyderabad.avif",
+        "https://cdn.prod.website-files.com/63413ad4dec8a93f7e3f4fc7/670cf80998935c86e973bfdb_networking-cafes-hyderabad.png"
+      ],
+      "og:title": "Best Networking Cafes in Hyderabad for Professionals",
+      "og:type": "website",
+      "ogDescription": "Discover top cafes in Hyderabad that offer the perfect ambiance for professional networking, informal meetings, and collaborations with like-minded individuals.",
+      "ogImage": "https://cdn.prod.website-files.com/63413ad4dec8a93f7e3f4fc7/670cf80998935c86e973bfdb_networking-cafes-hyderabad.png",
+      "ogTitle": "Best Networking Cafes in Hyderabad for Professionals",
+      "p:domain_verify": "d1edbe2ed051ec8823cf60f5cd5d8ebb",
+      "proxyUsed": "basic",
+      "publish_date": "Oct 14, 2024",
+      "scrapeId": "019f0896-b2ef-746f-89e2-f92986ed99cc",
+      "sourceURL": "https://www.plumhq.com/blog/networking-cafes-hyderabad",
+      "statusCode": 200,
+      "title": "Best Networking Cafes in Hyderabad for Professionals",
+      "twitter:card": "summary_large_image",
+      "twitter:description": "Discover top cafes in Hyderabad that offer the perfect ambiance for professional networking, informal meetings, and collaborations with like-minded individuals.",
+      "twitter:title": "Best Networking Cafes in Hyderabad for Professionals",
+      "url": "https://www.plumhq.com/blog/networking-cafes-hyderabad",
+      "viewport": "width=device-width, initial-scale=1"
+    },
+    "parent": {
+      "search_query": "Hyderabad cafes where startup people hang out",
+      "snippet": "Top Cafes for Networking in Hyderabad Below is a curated list of some of the best cafes in Hyderabad, perfect for professionals, freelancers, and entrepreneurs looking to network. Each cafe has a unique vibe that attracts a professional crowd and provides the right atmosphere for informal meetings or collaborations.",
+      "source_search": "firecrawl_search",
+      "title": "Best Networking Cafes in Hyderabad for Professionals"
+    }
+  },
+  "raw_path": "raw\\firecrawl_page\\www_plumhq_com-_blog_networking-cafes-hyderabad-ebaae38e99e9.json",
+  "source": "firecrawl_page",
+  "source_type": "source_page",
+  "title": "Best Networking Cafes in Hyderabad for Professionals",
+  "url": "https://www.plumhq.com/blog/networking-cafes-hyderabad"
+}

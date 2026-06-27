@@ -1,0 +1,37 @@
+{
+  "description": "At Hyderabad Angels, we believe an investor's greatest contribution isn't a cheque - it's perspective. Our members have collectively built over $1 billion in enterprise value across tech, healthcare, media, and manufacturing.",
+  "is_source_page": true,
+  "metadata": {
+    "firecrawl_metadata": {
+      "concurrencyLimited": false,
+      "contentType": "text/html; charset=UTF-8",
+      "creditsUsed": 1,
+      "favicon": "https://hyderabadangels.in/wp-content/uploads/2026/05/cropped-Favicon-32x32.png",
+      "generator": [
+        "WordPress 6.9.4",
+        "Elementor 4.1.4; features: e_font_icon_svg, additional_custom_breakpoints; settings: css_print_method-external, google_font-enabled, font_display-swap"
+      ],
+      "language": "en-US",
+      "msapplication-TileImage": "https://hyderabadangels.in/wp-content/uploads/2026/05/cropped-Favicon-270x270.png",
+      "proxyUsed": "basic",
+      "robots": "max-image-preview:large",
+      "scrapeId": "019f0627-d396-7291-b3ca-65310e02629b",
+      "sourceURL": "https://hyderabadangels.in/",
+      "statusCode": 200,
+      "title": "Hyderabad Angels – Value Beyond Capital",
+      "url": "https://hyderabadangels.in/",
+      "viewport": "width=device-width, initial-scale=1"
+    },
+    "parent": {
+      "search_query": "Hyderabad angel investor events",
+      "snippet": "At Hyderabad Angels, we believe an investor's greatest contribution isn't a cheque - it's perspective. Our members have collectively built over $1 billion in enterprise value across tech, healthcare, media, and manufacturing.",
+      "source_search": "firecrawl_search",
+      "title": "Hyderabad Angels - Value Beyond Capital"
+    }
+  },
+  "raw_path": "raw\\firecrawl_page\\hyderabadangels_in-4bae45f32f98.json",
+  "source": "firecrawl_page",
+  "source_type": "source_page",
+  "title": "Hyderabad Angels – Value Beyond Capital",
+  "url": "https://hyderabadangels.in/"
+}

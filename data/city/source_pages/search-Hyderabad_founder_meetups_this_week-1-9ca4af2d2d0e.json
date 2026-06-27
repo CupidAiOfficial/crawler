@@ -1,0 +1,10 @@
+{
+  "description": "Find Meetup events so you can do more of what matters to you. Or create your own group and meet people near you who share your interests.",
+  "raw_path": "raw\\firecrawl_search\\Hyderabad_founder_meetups_this_week-0-ddded93ca3e6.json",
+  "search_query": "Hyderabad founder meetups this week",
+  "search_rank": 1,
+  "source": "firecrawl_search",
+  "source_type": "search_result",
+  "title": "Founders groups | Meetup",
+  "url": "https://www.meetup.com/topics/founders/in/"
+}

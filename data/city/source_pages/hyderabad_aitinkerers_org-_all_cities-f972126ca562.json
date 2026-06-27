@@ -1,0 +1,44 @@
+{
+  "description": "AI Tinkerers Hyderabad hosts meetups, talks, and builder demos for the local AI community.",
+  "is_source_page": false,
+  "metadata": {
+    "firecrawl_metadata": {
+      "concurrencyLimited": false,
+      "contentType": "text/html; charset=utf-8",
+      "creditsUsed": 1,
+      "csrf-param": "authenticity_token",
+      "csrf-token": "zNs4J3u_Rm4sgZn5Wonhxq2jHwx7n__riELUEuSC4GE8MizXRSpxWvA3PDLPHAkZKX4HM5bm6g19_Yipr3BZOg",
+      "description": "AI Tinkerers Hyderabad hosts meetups, talks, and builder demos for the local AI community.",
+      "language": "en",
+      "layout": "blog_tw",
+      "og:description": "AI Tinkerers Hyderabad hosts meetups, talks, and builder demos for the local AI community.",
+      "og:image": "https://images.aitinkerers.org/blog_images/kmfygdp74u8-dNTC.png",
+      "og:title": "AI Events in Hyderabad | AI Tinkerers Meetups 2026",
+      "og:type": "website",
+      "og:url": "https://hyderabad.aitinkerers.org/all_cities",
+      "proxyUsed": "basic",
+      "scrapeId": "019f0613-941a-74fc-99d6-7967b824d2b3",
+      "sourceURL": "https://hyderabad.aitinkerers.org/all_cities",
+      "statusCode": 200,
+      "title": "AI Events in Hyderabad | AI Tinkerers Meetups 2026",
+      "twitter:card": "summary",
+      "twitter:description": "AI Tinkerers Hyderabad hosts meetups, talks, and builder demos for the local AI community.",
+      "twitter:image": "https://images.aitinkerers.org/blog_images/kmfygdp74u8-dNTC.png",
+      "twitter:title": "AI Events in Hyderabad | AI Tinkerers Meetups 2026",
+      "twitter:url": "https://hyderabad.aitinkerers.org/all_cities",
+      "url": "https://hyderabad.aitinkerers.org/all_cities",
+      "viewport": "width=device-width, initial-scale=1.0"
+    },
+    "parent": {
+      "search_query": "Hyderabad AI developer meetups",
+      "snippet": "Best AI meetup in Hyderabad for builders AI Tinkerers Hyderabad is a hands-on AI builder meetup with live demos, technical discussion, and no-pitch networking. AI Tinkerers Hyderabad is built for engineers, founders, researchers, product builders, and developers working on AI agents, multimodal and voice interfaces, RAG and knowledge systems, AI coding tools, workflow automation, evals ...",
+      "source_search": "firecrawl_search",
+      "title": "AI Events in Hyderabad | AI Tinkerers Meetups 2026"
+    }
+  },
+  "raw_path": "raw\\firecrawl_page\\hyderabad_aitinkerers_org-_all_cities-f972126ca562.json",
+  "source": "firecrawl_page",
+  "source_type": "entity_page",
+  "title": "AI Events in Hyderabad | AI Tinkerers Meetups 2026",
+  "url": "https://hyderabad.aitinkerers.org/all_cities"
+}

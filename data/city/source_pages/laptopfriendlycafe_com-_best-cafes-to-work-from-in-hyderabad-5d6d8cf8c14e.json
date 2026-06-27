@@ -1,0 +1,46 @@
+{
+  "description": "Discover top-rated cafes in Hyderabad for a productive and relaxing work environment. Our guide highlights the best coffee shops where you can comfortably work and unwind.",
+  "is_source_page": true,
+  "metadata": {
+    "firecrawl_metadata": {
+      "concurrencyLimited": false,
+      "contentType": "text/html; charset=UTF-8",
+      "creditsUsed": 1,
+      "description": "Discover top-rated cafes in Hyderabad for a productive and relaxing work environment. Our guide highlights the best coffee shops where you can comfortably work and unwind.",
+      "keywords": "laptop, cafe, friendly, freelancer, digital nomads, professionals, studying, free wifi, cafes near me",
+      "language": "en",
+      "og:description": "Discover top-rated cafes in Hyderabad for a productive and relaxing work environment. Our guide highlights the best coffee shops where you can comfortably work and unwind.",
+      "og:image": "https://laptopfriendlycafe.com/images/brooke-cagle-g1Kr4Ozfoac-unsplash-1920x1280.jpg",
+      "og:image:alt": "Three people sitting at a cafe table laughing together",
+      "og:image:height": "1280",
+      "og:image:secure_url": "https://laptopfriendlycafe.com/images/brooke-cagle-g1Kr4Ozfoac-unsplash-1920x1280.jpg",
+      "og:image:type": "image/jpeg",
+      "og:image:width": "1920",
+      "og:title": "Top 10 Best Cafes To Work From In Hyderabad - UPDATED: June, 2026",
+      "og:type": "website",
+      "og:url": "https://laptopfriendlycafe.com/best-cafes-to-work-from-in-hyderabad",
+      "ogDescription": "Discover top-rated cafes in Hyderabad for a productive and relaxing work environment. Our guide highlights the best coffee shops where you can comfortably work and unwind.",
+      "ogImage": "https://laptopfriendlycafe.com/images/brooke-cagle-g1Kr4Ozfoac-unsplash-1920x1280.jpg",
+      "ogTitle": "Top 10 Best Cafes To Work From In Hyderabad - UPDATED: June, 2026",
+      "ogUrl": "https://laptopfriendlycafe.com/best-cafes-to-work-from-in-hyderabad",
+      "proxyUsed": "basic",
+      "scrapeId": "019f08a3-7e50-715a-86d6-71af130e2c03",
+      "sourceURL": "https://laptopfriendlycafe.com/best-cafes-to-work-from-in-hyderabad",
+      "statusCode": 200,
+      "title": "\n\t\tTop 10 Best Cafes To Work From In Hyderabad - UPDATED: June, 2026\t",
+      "url": "https://laptopfriendlycafe.com/best-cafes-to-work-from-in-hyderabad",
+      "viewport": "width=device-width, initial-scale=1.0"
+    },
+    "parent": {
+      "search_query": "Hyderabad cafes where startup people hang out",
+      "snippet": "Discover top-rated cafes in Hyderabad for a productive and relaxing work environment. Our guide highlights the best coffee shops where you can comfortably work and unwind.",
+      "source_search": "firecrawl_search",
+      "title": "Top 10 Best Cafes To Work From In Hyderabad - UPDATED: June, 2026"
+    }
+  },
+  "raw_path": "raw\\firecrawl_page\\laptopfriendlycafe_com-_best-cafes-to-work-from-in-hyderabad-5d6d8cf8c14e.json",
+  "source": "firecrawl_page",
+  "source_type": "source_page",
+  "title": "Top 10 Best Cafes To Work From In Hyderabad - UPDATED: June, 2026",
+  "url": "https://laptopfriendlycafe.com/best-cafes-to-work-from-in-hyderabad"
+}

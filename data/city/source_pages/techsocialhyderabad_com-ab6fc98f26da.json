@@ -1,0 +1,74 @@
+{
+  "description": "Join Hyderabad's leading tech community at Tech Social Hyderabad. Weekly networking events for developers, data scientists, cybersecurity professionals & tech enthusiasts. Connect, learn, and grow your career in Hyderabad.",
+  "is_source_page": false,
+  "metadata": {
+    "firecrawl_metadata": {
+      "application-name": "Tech Social Hyderabad",
+      "concurrencyLimited": false,
+      "contentType": "text/html; charset=utf-8",
+      "creditsUsed": 1,
+      "description": "Join Hyderabad's leading tech community at Tech Social Hyderabad. Weekly networking events for developers, data scientists, cybersecurity professionals & tech enthusiasts. Connect, learn, and grow your career in Hyderabad.",
+      "favicon": "https://techsocialhyderabad.com/favicon.ico?favicon.662fec8a.ico",
+      "googlebot": "index, follow, max-video-preview:23, max-image-preview:large",
+      "keywords": "Cybersecurity networking,Data networking,Tech networking,IT networking,Data science networking,Web developer networking,Web design networking,Tech meetup,Tech Social Hyderabad event,Tech community,Developer networking,Tech professionals meetup,After work tech event,Tech social gathering,Technology networking events,IT career growth,Tech industry events,Networking for developers,Tech innovation meetups,Software engineering networking,Cloud computing networking,AI and machine learning events,Startup networking events,Tech entrepreneur meetups,Tech job opportunities,Professional networking in IT,Tech collaboration events,Tech leadership networking,Tech enthusiasts community,Tech career advancement,Hyderabad tech meetup,Hyderabad networking events,Hyderabad tech community,Hyderabad developer meetup,Hyderabad tech professionals,Hyderabad software engineering,Hyderabad data science meetup,Hyderabad cybersecurity networking,Tech events in Hyderabad,Hyderabad tech career,Hyderabad startup community,Hyderabad IT networking",
+      "language": "en",
+      "next-size-adjust": "",
+      "og:description": "Join Hyderabad's leading tech community at Tech Social Hyderabad. Weekly networking events for developers, data scientists, cybersecurity professionals & tech enthusiasts. Connect, learn, and grow your career in Hyderabad.",
+      "og:image": [
+        "https://techsocialhyderabad.com/images/socialise-with-people.webp",
+        "https://techsocialhyderabad.com/images/socialise-with-people.jpg"
+      ],
+      "og:image:alt": [
+        "Socialise With People",
+        "Socialise With People OG"
+      ],
+      "og:image:height": [
+        "3024",
+        "3024"
+      ],
+      "og:image:type": [
+        "image/webp",
+        "image/jpeg"
+      ],
+      "og:image:width": [
+        "4032",
+        "4032"
+      ],
+      "og:locale": "en",
+      "og:site_name": "Tech Social Hyderabad",
+      "og:title": "Tech Social Hyderabad | Hyderabad Tech Networking Events & Meetups",
+      "og:type": "website",
+      "og:url": "https://techsocialhyderabad.com",
+      "ogDescription": "Join Hyderabad's leading tech community at Tech Social Hyderabad. Weekly networking events for developers, data scientists, cybersecurity professionals & tech enthusiasts. Connect, learn, and grow your career in Hyderabad.",
+      "ogImage": "https://techsocialhyderabad.com/images/socialise-with-people.webp",
+      "ogLocale": "en",
+      "ogSiteName": "Tech Social Hyderabad",
+      "ogTitle": "Tech Social Hyderabad | Hyderabad Tech Networking Events & Meetups",
+      "ogUrl": "https://techsocialhyderabad.com",
+      "proxyUsed": "basic",
+      "publisher": "Tech Social",
+      "robots": "index, follow",
+      "scrapeId": "019f05f4-ec17-742c-acb2-810317ae7af8",
+      "sourceURL": "https://techsocialhyderabad.com/",
+      "statusCode": 200,
+      "title": "Tech Social Hyderabad | Hyderabad Tech Networking Events & Meetups",
+      "twitter:card": "summary_large_image",
+      "twitter:description": "Join Hyderabad's leading tech community at Tech Social Hyderabad. Weekly networking events for developers, data scientists, cybersecurity professionals & tech enthusiasts. Connect, learn, and grow your career in Hyderabad.",
+      "twitter:image": "https://techsocialhyderabad.com/images/socialise-with-people.webp",
+      "twitter:title": "Tech Social Hyderabad | Hyderabad Tech Networking Events & Meetups",
+      "url": "https://techsocialhyderabad.com/",
+      "viewport": "width=device-width, initial-scale=1"
+    },
+    "parent": {
+      "search_query": "Hyderabad tech networking events this month",
+      "snippet": "Join Hyderabad's leading tech community at Tech Social Hyderabad. Weekly networking events for developers, data scientists, cybersecurity professionals & tech enthusiasts. Connect, learn, and grow your career in Hyderabad.",
+      "source_search": "firecrawl_search",
+      "title": "Tech Social Hyderabad | Hyderabad Tech Networking Events & Meetups"
+    }
+  },
+  "raw_path": "raw\\firecrawl_page\\techsocialhyderabad_com-ab6fc98f26da.json",
+  "source": "firecrawl_page",
+  "source_type": "entity_page",
+  "title": "Tech Social Hyderabad | Hyderabad Tech Networking Events & Meetups",
+  "url": "https://techsocialhyderabad.com/"
+}

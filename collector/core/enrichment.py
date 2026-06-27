@@ -33,6 +33,19 @@ INTENT_KEYWORDS: dict[str, list[str]] = {
 POSITIVE = {"good", "great", "best", "love", "amazing", "safe", "clean", "friendly", "beautiful"}
 NEGATIVE = {"bad", "worst", "crowded", "unsafe", "dirty", "expensive", "slow", "rude"}
 
+APP_BRANCH_BY_CATEGORY = {
+    "restaurant": "date",
+    "cafe": "date",
+    "pub": "date",
+    "bar": "date",
+    "nightlife": "date",
+    "bakery": "date",
+    "coworking_space": "build",
+    "college": "network",
+    "community_space": "network",
+    "ngo": "network",
+}
+
 
 class EnrichmentEngine:
     def enrich(self, entity: CityEntity, reviews: list[TextSignal] | None = None) -> EntityMetadata:
@@ -60,7 +73,22 @@ class EnrichmentEngine:
         metadata.hidden_gem_score = self.hidden_gem_score(entity)
         metadata.popularity_score = self.popularity_score(entity, reviews)
         metadata.source_counts = Counter(record.source for record in entity.sources)
+        branch = self.app_branch(entity, text)
+        metadata.branch_ids = sorted(set(metadata.branch_ids + [branch, "places"]))
+        metadata.context_keys = sorted(set(metadata.context_keys + metadata.intent_tags + [branch, entity.locality or "Hyderabad"]))
         return metadata
+
+    def app_branch(self, entity: CityEntity, text: str) -> str:
+        category = (entity.primary_category or entity.category or "").lower()
+        if category in APP_BRANCH_BY_CATEGORY:
+            return APP_BRANCH_BY_CATEGORY[category]
+        if self._contains_term(text, "startup") or self._contains_term(text, "cowork") or self._contains_term(text, "founder"):
+            return "build"
+        if self._contains_term(text, "network") or self._contains_term(text, "community") or self._contains_term(text, "college"):
+            return "network"
+        if self._contains_term(text, "date") or category in {"restaurant", "cafe", "pub", "bar"}:
+            return "date"
+        return "explore"
 
     def intent_tags(self, text: str) -> list[str]:
         tags = []

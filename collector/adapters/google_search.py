@@ -1,10 +1,15 @@
 from __future__ import annotations
 
+import logging
+
 from collector.core.config import settings
 from collector.core.http import PoliteHttpClient
 from collector.core.models import CandidateKind, CityEntity, CrawlCandidate
 from collector.core.orchestrator import SourceAdapter
 from collector.core.storage import JsonStore
+
+
+logger = logging.getLogger(__name__)
 
 
 class GoogleSearchAdapter(SourceAdapter):
@@ -19,11 +24,13 @@ class GoogleSearchAdapter(SourceAdapter):
 
     def crawl(self, candidate: CrawlCandidate) -> tuple[list[CityEntity], list[CrawlCandidate]]:
         if not settings.google_custom_search_api_key or not settings.google_custom_search_engine_id:
+            logger.warning("google search skipped missing credentials query=%s", candidate.value)
             raise RuntimeError(
                 "Google search is not configured. Set GOOGLE_CUSTOM_SEARCH_API_KEY and "
                 "GOOGLE_CUSTOM_SEARCH_ENGINE_ID in .env to use the official Custom Search JSON API."
             )
         query = self._query(candidate.value)
+        logger.info("searching google_custom_search query=%s depth=%s", query, candidate.depth)
         payload = self.http.get_json(
             "https://www.googleapis.com/customsearch/v1",
             params={
@@ -35,6 +42,7 @@ class GoogleSearchAdapter(SourceAdapter):
         )
         self.store.save_raw(self.name, f"{candidate.value}-{candidate.depth}", payload)
         items = (payload or {}).get("items", [])  # type: ignore[union-attr]
+        logger.info("google_custom_search results query=%s count=%s", query, len(items))
         new_candidates: list[CrawlCandidate] = []
         for rank, item in enumerate(items):
             url = item.get("link")

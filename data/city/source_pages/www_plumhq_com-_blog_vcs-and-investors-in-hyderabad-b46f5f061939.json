@@ -1,0 +1,50 @@
+{
+  "description": "Explore the top venture capitalists and investors in Hyderabad, providing funding, mentorship, and support to help startups scale and succeed.",
+  "is_source_page": true,
+  "metadata": {
+    "firecrawl_metadata": {
+      "concurrencyLimited": false,
+      "contentType": "text/html; charset=utf-8",
+      "creditsUsed": 1,
+      "description": "Explore the top venture capitalists and investors in Hyderabad, providing funding, mentorship, and support to help startups scale and succeed.",
+      "facebook-domain-verification": "ru8wx4tsmodbnj179idtoc0n7rsbhg",
+      "favicon": "https://cdn.prod.website-files.com/63413ad4dec8a91fe53f4fb0/6350395d8e60f11fea41fabc_FVICO.png",
+      "generator": "Webflow",
+      "language": "en",
+      "og:description": "Explore the top venture capitalists and investors in Hyderabad, providing funding, mentorship, and support to help startups scale and succeed.",
+      "og:image": [
+        "https://cdn.prod.website-files.com/63413ad4dec8a93f7e3f4fc7/670ce8ebf85c2c8beb255124_vcs-and-investors-in-hyderabad.png",
+        "https://cdn.prod.website-files.com/63413ad4dec8a93f7e3f4fc7/67595ab8c7f7e084eb1519f3_670ce8ebf85c2c8beb255124_vcs-and-investors-in-hyderabad.avif",
+        "https://cdn.prod.website-files.com/63413ad4dec8a93f7e3f4fc7/670ce8ebf85c2c8beb255124_vcs-and-investors-in-hyderabad.png"
+      ],
+      "og:title": "Top VCs and Investors in Hyderabad for Startups",
+      "og:type": "website",
+      "ogDescription": "Explore the top venture capitalists and investors in Hyderabad, providing funding, mentorship, and support to help startups scale and succeed.",
+      "ogImage": "https://cdn.prod.website-files.com/63413ad4dec8a93f7e3f4fc7/670ce8ebf85c2c8beb255124_vcs-and-investors-in-hyderabad.png",
+      "ogTitle": "Top VCs and Investors in Hyderabad for Startups",
+      "p:domain_verify": "d1edbe2ed051ec8823cf60f5cd5d8ebb",
+      "proxyUsed": "basic",
+      "publish_date": "Oct 14, 2024",
+      "scrapeId": "019f05ce-a704-768f-844a-6cca63769a64",
+      "sourceURL": "https://www.plumhq.com/blog/vcs-and-investors-in-hyderabad",
+      "statusCode": 200,
+      "title": "Top VCs and Investors in Hyderabad for Startups",
+      "twitter:card": "summary_large_image",
+      "twitter:description": "Explore the top venture capitalists and investors in Hyderabad, providing funding, mentorship, and support to help startups scale and succeed.",
+      "twitter:title": "Top VCs and Investors in Hyderabad for Startups",
+      "url": "https://www.plumhq.com/blog/vcs-and-investors-in-hyderabad",
+      "viewport": "width=device-width, initial-scale=1"
+    },
+    "parent": {
+      "search_query": "where to meet investors in Hyderabad startup ecosystem",
+      "snippet": "Explore the top venture capitalists and investors in Hyderabad, providing funding, mentorship, and support to help startups scale and succeed.",
+      "source_search": "firecrawl_search",
+      "title": "Top VCs and Investors in Hyderabad for Startups"
+    }
+  },
+  "raw_path": "raw\\firecrawl_page\\www_plumhq_com-_blog_vcs-and-investors-in-hyderabad-b46f5f061939.json",
+  "source": "firecrawl_page",
+  "source_type": "source_page",
+  "title": "Top VCs and Investors in Hyderabad for Startups",
+  "url": "https://www.plumhq.com/blog/vcs-and-investors-in-hyderabad"
+}

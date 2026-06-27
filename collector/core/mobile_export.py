@@ -9,6 +9,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from collector.core.models import CityEntity
+from collector.core.quality import ProductionReadinessValidator
 from collector.core.storage import JsonStore
 
 
@@ -42,7 +43,7 @@ class MobileSearchCard(BaseModel):
     address: str | None = None
     latitude: float | None = None
     longitude: float | None = None
-    image_url: str | None = None
+    image_id: str | None = None
     timings: dict[str, Any] = Field(default_factory=dict)
     rating: float | None = None
     rating_count: int | None = None
@@ -70,6 +71,7 @@ class MobileSearchIndex(BaseModel):
 class MobileCardExporter:
     def __init__(self, store: JsonStore) -> None:
         self.store = store
+        self.validator = ProductionReadinessValidator()
 
     def export(
         self,
@@ -85,6 +87,7 @@ class MobileCardExporter:
         cards = [
             self._card(entity, query_terms, query_mood_tags, locality_hint, locality_center, user_latitude, user_longitude)
             for entity in self.store.iter_entities()
+            if self.validator.validate(entity).production_ready
         ]
         cards = [card for card in cards if self._include_card(card, query_terms, query_mood_tags, locality_hint)]
         cards.sort(key=lambda card: (card.relevance_score, -(card.distance_km or 9999)), reverse=True)
@@ -135,7 +138,7 @@ class MobileCardExporter:
             address=entity.address,
             latitude=entity.latitude,
             longitude=entity.longitude,
-            image_url=self._image_url(entity),
+            image_id=self._image_id(entity),
             timings=entity.timings,
             rating=rating,
             rating_count=rating_count,
@@ -173,7 +176,7 @@ class MobileCardExporter:
             score += 0.5
         if entity.address:
             score += 0.25
-        if self._image_url(entity):
+        if self._image_id(entity):
             score += 0.25
         return round(score, 3)
 
@@ -295,6 +298,16 @@ class MobileCardExporter:
         if not scores:
             return None, sum(counts) if counts else None
         return round(sum(scores) / len(scores), 2), sum(counts) if counts else None
+
+    def _image_id(self, entity: CityEntity) -> str | None:
+        if entity.card.primary_image_id:
+            return entity.card.primary_image_id
+        primary = next((asset.id for asset in entity.media if asset.is_primary), None)
+        if primary:
+            return primary
+        if entity.media:
+            return entity.media[0].id
+        return None
 
     def _image_url(self, entity: CityEntity) -> str | None:
         for source in entity.sources:
